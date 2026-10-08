@@ -3,7 +3,7 @@ package com.example.bosondiag
 /**
  * Y16 -> palette-colored ARGB.
  * Optional per-pixel offset (software fixed-pattern correction) is subtracted first, then a
- * smoothed 1%-99% percentile range is found (never narrower than [minRange] counts), then either a
+ * smoothed 0.1%-99.95% percentile range is found (never narrower than [minRange] counts), then either a
  * linear stretch or the soft-tail [ToneCurve] LUT is applied, then the palette.
  */
 class ToneMapper(private val w: Int, private val h: Int, private val wantHist: Boolean = false) {
@@ -56,8 +56,8 @@ class ToneMapper(private val w: Int, private val h: Int, private val wantHist: B
             vals[p] = v
             hist[v shr 2]++
         }
-        val lowTarget = total / 100
-        val highTarget = total - total / 100
+        val lowTarget = total / 1000
+        val highTarget = total - total / 2000
         var acc = 0
         var loBin = 0
         var hiBin = hist.size - 1
